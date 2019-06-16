@@ -1,5 +1,6 @@
 ﻿using Loans.Domain.Applications;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace Loan.Tests
@@ -66,5 +67,28 @@ namespace Loan.Tests
         }
 
         //00:38:37
+
+        [Test]
+        public void NotAllowZeroYears()
+        {
+            //INFO: overenie vyskytu exception
+            Assert.That(() => new LoanTerm(0), Throws.TypeOf<ArgumentOutOfRangeException>());
+
+            Assert.That(() => new LoanTerm(0), Throws.TypeOf<ArgumentOutOfRangeException>()
+                                .With
+                                .Property("Message")
+                                .EqualTo("Please specify a value greater than 0.\r\nParameter name: years"));
+
+            Assert.That(() => new LoanTerm(0), Throws.TypeOf<ArgumentOutOfRangeException>()
+                               .With
+                               .Property("ParamName")
+                               .EqualTo("years"));
+
+            Assert.That(() => new LoanTerm(0), Throws.TypeOf<ArgumentOutOfRangeException>()
+                               .With
+                               .Matches<ArgumentOutOfRangeException>(
+                                ex => ex.ParamName == "years")) ;
+        }
     }
 }
+  
