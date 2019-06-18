@@ -9,6 +9,7 @@ namespace Loan.Tests
     public class LoanTermShould
     {
         [Test]
+        [Ignore("Need to complete update work")] //test je ignorovany , mozne pridat comment , aplikovatelne aj na triedu
         public void ReturnTermInMonths()
         {
             //sut --> system under test
