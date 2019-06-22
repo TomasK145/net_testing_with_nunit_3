@@ -10,7 +10,8 @@ namespace Loan.Tests
     class MonthlyRepaymentComparisonShould
     {
         [Test]
-        [Category("Product Comparison")] //testu moze byt priradena jedna alebo viacero category, aplikovatelne aj na triedu
+        //[Category("Product Comparison")] //testu moze byt priradena jedna alebo viacero category, aplikovatelne aj na triedu
+        [ProductComparison]
         [Category("Xyz")]
         public void RespectValueEquality()
         {
