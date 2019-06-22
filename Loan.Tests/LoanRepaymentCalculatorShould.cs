@@ -86,7 +86,7 @@ namespace Loan.Tests
                                                                 new LoanTerm(termInYears));
         }
 
-        //TESTCASE so source test data
+        //TESTCASE so source test data 
         [Test]
         [TestCaseSource(typeof(MonthlyRepaymentCsvData), "GetTestCases", new object[] { "Data.csv" })] //array objektov reprezentuje vstupny parameter metody GetTestCases
         public void CalculateCorrectMonthlyRepayment_Csv(decimal principal,
@@ -105,5 +105,47 @@ namespace Loan.Tests
             //Act
             Assert.That(monthlyPayment, Is.EqualTo(expectedMontlyPayment));
         }
+
+        //TEST s roznymi kombinaciami
+        [Test]
+        public void CalculateCorrectMonthlyRepayment_Combinatorial(
+            [Values(100_000,200_000, 500_000)] decimal principal,
+            [Values(6.5, 10, 10)] decimal interestRate,
+            [Values(10, 20, 30)] int termInYear)
+        {
+            var sut = new LoanRepaymentCalculator();
+
+            var monthlyPayment = sut.CalculateMonthlyRepayment(new LoanAmount("USD", principal), interestRate, new LoanTerm(termInYear));
+            
+        }
+
+        //TEST s roznymi kombinaciami - Sekvencne vykonavanie
+        [Test]
+        [Sequential]
+        public void CalculateCorrectMonthlyRepayment_Sequential(
+            [Values(200_000, 200_000, 500_000)] decimal principal,
+            [Values(6.5, 10, 10)] decimal interestRate,
+            [Values(30, 30, 30)] int termInYear,
+            [Values(1264.14, 1755.14, 4387.86)] decimal expectedMonthlyPayment)
+        {
+            var sut = new LoanRepaymentCalculator();
+
+            var monthlyPayment = sut.CalculateMonthlyRepayment(new LoanAmount("USD", principal), interestRate, new LoanTerm(termInYear));
+
+            Assert.That(monthlyPayment, Is.EqualTo(expectedMonthlyPayment));
+        }
+
+        //TEST s roznymi kombinaciami --> vyuzitie range
+        [Test]
+        public void CalculateCorrectMonthlyRepayment_Range(
+            [Range(50_000, 1_000_000, 50_000)] decimal principal,
+            [Range(0.5, 20, 0.5)] decimal interestRate,
+            [Values(10, 20, 30)] int termInYear)
+        {
+            var sut = new LoanRepaymentCalculator();
+
+            var monthlyPayment = sut.CalculateMonthlyRepayment(new LoanAmount("USD", principal), interestRate, new LoanTerm(termInYear));
+
+        } 
     }
 }
