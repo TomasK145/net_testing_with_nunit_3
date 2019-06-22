@@ -106,9 +106,30 @@ namespace Loan.Tests
 
             var expectedProduct = new MonthlyRepaymentComparison("a", 1, 643.28m);
 
-            Assert.That(comparisons, Does.Contain(expectedProduct));
+            Assert.That(comparisons, Does.Contain(expectedProduct)); 
 
             Assert.That(comparisons, Is.Unique);
+        }
+
+        [Test]
+        public void ReturnComparisionForFirstProduct_WithPartialKnownExpectedValues()
+        { 
+            List<MonthlyRepaymentComparison> comparisons = sut.CompareMonthlyRepayments(new LoanTerm(30));
+
+            Assert.That(comparisons, Has.Exactly(1)
+                                        .Matches<MonthlyRepaymentComparison>(
+                                            item => item.ProductName == "a" &&
+                                                    item.InterestRate == 1 &&
+                                                    item.MonthlyRepayment > 0));
+        }
+
+        [Test]
+        public void ReturnComparisionForFirstProduct_WithCustomConstraint()
+        {
+            List<MonthlyRepaymentComparison> comparisons = sut.CompareMonthlyRepayments(new LoanTerm(30));
+
+            Assert.That(comparisons, Has.Exactly(1)
+                                        .Matches(new MonthlyRepaymentGreaterThanZeroConstraint("a", 1)));
         }
     }
     //56:00
